@@ -30,6 +30,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_op = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -244,8 +245,10 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lbl_op);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(15, 15);
             this.Name = "MainWindow";
+            this.Text = "ModPack Installer";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.gp_options.ResumeLayout(false);
             this.ResumeLayout(false);

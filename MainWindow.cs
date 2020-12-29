@@ -1,28 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Octokit;
-using Timer = System.Threading.Timer;
 
 namespace ModPackInstaller
 {
     public partial class MainWindow : Form
     {
-        protected bool GoodVersion;
+        private const string _version = "1.2";
         private string _path;
-        private int _ticks = 0;
-        private const string _version = "1.1";
+        private int _ticks;
+        protected bool GoodVersion;
 
         public MainWindow()
         {
@@ -126,7 +119,7 @@ namespace ModPackInstaller
             {
                 lbl_op.Text = "OPERATION EN COURS : Démarrage de l'installation";
                 SetPbValue(2);
-                lbl_pct.Text = GetPbValue().ToString() + " %";
+                lbl_pct.Text = GetPbValue() + " %";
                 if (Directory.Exists(@"mods"))
                 {
                     if (Directory.Exists(@"config"))
@@ -134,11 +127,11 @@ namespace ModPackInstaller
                         lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier mods";
                         Directory.Move(@"mods", _path + @".\mods\");
                         SetPbValue(15);
-                        lbl_pct.Text = GetPbValue().ToString() + " %";
+                        lbl_pct.Text = GetPbValue() + " %";
                         lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier config";
                         Directory.Move(@"config", _path + @".\config\");
                         SetPbValue(46);
-                        lbl_pct.Text = GetPbValue().ToString() + " %";
+                        lbl_pct.Text = GetPbValue() + " %";
 
                         if (cb_ressources.Checked)
                         {
@@ -147,7 +140,7 @@ namespace ModPackInstaller
                                 Directory.Move(@"resourcepacks", _path + @".\resourcepacks\");
                                 lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier shaderpacks";
                                 SetPbValue(67);
-                                lbl_pct.Text = GetPbValue().ToString() + " %";
+                                lbl_pct.Text = GetPbValue() + " %";
                             }
                             else
                             {
@@ -161,7 +154,7 @@ namespace ModPackInstaller
                             {
                                 Directory.Move(@"shaderpacks", _path + @".\shaderpacks\");
                                 SetPbValue(83);
-                                lbl_pct.Text = GetPbValue().ToString() + " %";
+                                lbl_pct.Text = GetPbValue() + " %";
                             }
                             else
                             {
@@ -170,7 +163,7 @@ namespace ModPackInstaller
                         }
 
                         SetPbValue(100);
-                        lbl_pct.Text = GetPbValue().ToString() + " %";
+                        lbl_pct.Text = GetPbValue() + " %";
                         MessageBox.Show(
                             "Installation terminée, vous pouvez dès à présent démarrer votre Minecraft");
                         SetPbValue(0);
@@ -224,9 +217,7 @@ namespace ModPackInstaller
                     {
                         Directory.Move(_path + @".\resourcepacks\", dirPath + @".\resourcepacks");
                         if (Directory.Exists(_path + @".\shaderpacks\"))
-                        {
                             Directory.Move(_path + @".\shaderpacks\", dirPath + @".\shaderpacks");
-                        }
                     }
                 }
             }
@@ -235,21 +226,11 @@ namespace ModPackInstaller
         private void timer1_Tick(object sender, EventArgs e)
         {
             _ticks++;
-            if (_ticks == 1)
-            {
-                lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 3";
-            }
+            if (_ticks == 1) lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 3";
 
-            if (_ticks == 2)
-            {
-                lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 2";
-            }
+            if (_ticks == 2) lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 2";
 
-            if (_ticks == 3)
-            {
-                lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 1";
-                
-            }
+            if (_ticks == 3) lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 1";
             if (_ticks == 4)
             {
                 lbl_op.Text = "OPERATION EN COURS : Installation du modpack";
@@ -262,18 +243,19 @@ namespace ModPackInstaller
         {
             CheckGitHubNewerVersion();
         }
-        private async System.Threading.Tasks.Task CheckGitHubNewerVersion()
+
+        private async Task CheckGitHubNewerVersion()
         {
             //Get all releases from GitHub
             //Source: https://octokitnet.readthedocs.io/en/latest/getting-started/
-            GitHubClient client = new GitHubClient(new ProductHeaderValue("thomasrts"));
-            IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("thomasrts", "ModPackInstaller");
-    
+            var client = new GitHubClient(new ProductHeaderValue("thomasrts"));
+            var releases = await client.Repository.Release.GetAll("thomasrts", "ModPackInstaller");
+
             //Setup the versions
-            Version latestGitHubVersion = new Version(releases[0].TagName);
-            Version localVersion = new Version(_version); //Replace this with your local version. 
+            var latestGitHubVersion = new Version(releases[0].TagName);
+            var localVersion = new Version(_version); //Replace this with your local version. 
             //Only tested with numeric values.
-    
+
             //Compare the Versions
             //Source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
             double versionComparison = localVersion.CompareTo(latestGitHubVersion);
@@ -282,9 +264,11 @@ namespace ModPackInstaller
                 MessageBox.Show("La version que vous avez est dépassée, la nouvelle version va être télécharger");
                 using (var _client = new WebClient())
                 {
-                    _client.DownloadFile("https://github.com/thomasrts/ModPackInstaller/releases/download/"+latestGitHubVersion+"/ModPackInstaller.exe", "ModPackInstaller1.exe");
+                    _client.DownloadFile(
+                        "https://github.com/thomasrts/ModPackInstaller/releases/download/" + latestGitHubVersion +
+                        "/ModPackInstaller.exe", "ModPackInstaller-" + latestGitHubVersion + ".exe");
+                    File.WriteAllText(@"version.txt", latestGitHubVersion.ToString());
                     Process.Start(@"Update.exe");
-
                 }
             }
             else
