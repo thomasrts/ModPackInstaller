@@ -8,3 +8,6 @@ C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.
 C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.exe
 C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.pdb
 C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.MainWindow.resources
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\bin\Debug\Octokit.dll
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\bin\Debug\Octokit.xml
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.csproj.CopyComplete

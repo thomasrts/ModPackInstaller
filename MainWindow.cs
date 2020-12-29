@@ -22,7 +22,7 @@ namespace ModPackInstaller
         protected bool GoodVersion;
         private string _path;
         private int _ticks = 0;
-        private const string _version = "v1.0";
+        private const string _version = "1.1";
 
         public MainWindow()
         {
@@ -203,6 +203,7 @@ namespace ModPackInstaller
         {
             pb_statut.ForeColor = Color.Teal;
             pb_statut.Value = 0;
+            lbl_git.Text = "Version : " + _version;
         }
 
         private void SaveFolders()
@@ -259,34 +260,36 @@ namespace ModPackInstaller
 
         private void btn_maj_Click(object sender, EventArgs e)
         {
-            
+            CheckGitHubNewerVersion();
         }
         private async System.Threading.Tasks.Task CheckGitHubNewerVersion()
         {
             //Get all releases from GitHub
             //Source: https://octokitnet.readthedocs.io/en/latest/getting-started/
-            GitHubClient client = new GitHubClient(new ProductHeaderValue("SomeName"));
+            GitHubClient client = new GitHubClient(new ProductHeaderValue("thomasrts"));
             IReadOnlyList<Release> releases = await client.Repository.Release.GetAll("thomasrts", "ModPackInstaller");
     
             //Setup the versions
             Version latestGitHubVersion = new Version(releases[0].TagName);
-            Version localVersion = new Version("X.X.X"); //Replace this with your local version. 
+            Version localVersion = new Version(_version); //Replace this with your local version. 
             //Only tested with numeric values.
     
             //Compare the Versions
             //Source: https://stackoverflow.com/questions/7568147/compare-version-numbers-without-using-split-function
-            int versionComparison = localVersion.CompareTo(latestGitHubVersion);
-            if (versionComparison < 0)
+            double versionComparison = localVersion.CompareTo(latestGitHubVersion);
+            if (versionComparison < 0.0)
             {
-                //The version on GitHub is more up to date than this local release.
-            }
-            else if (versionComparison > 0)
-            {
-                //This local version is greater than the release version on GitHub.
+                MessageBox.Show("La version que vous avez est dépassée, la nouvelle version va être télécharger");
+                using (var _client = new WebClient())
+                {
+                    _client.DownloadFile("https://github.com/thomasrts/ModPackInstaller/releases/download/"+latestGitHubVersion+"/ModPackInstaller.exe", "ModPackInstaller1.exe");
+                    Process.Start(@"Update.exe");
+
+                }
             }
             else
             {
-                //This local Version and the Version on GitHub are equal.
+                MessageBox.Show("La version que vous avez est la plus récente");
             }
         }
     }

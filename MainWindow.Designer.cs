@@ -49,6 +49,7 @@
             this.lbl_pct = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btn_maj = new System.Windows.Forms.Button();
+            this.lbl_git = new System.Windows.Forms.Label();
             this.gp_options.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -214,12 +215,21 @@
             this.btn_maj.UseVisualStyleBackColor = true;
             this.btn_maj.Click += new System.EventHandler(this.btn_maj_Click);
             // 
+            // lbl_git
+            // 
+            this.lbl_git.Location = new System.Drawing.Point(556, 26);
+            this.lbl_git.Name = "lbl_git";
+            this.lbl_git.Size = new System.Drawing.Size(115, 16);
+            this.lbl_git.TabIndex = 19;
+            this.lbl_git.Text = "Version : ";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 551);
+            this.Controls.Add(this.lbl_git);
             this.Controls.Add(this.btn_maj);
             this.Controls.Add(this.lbl_pct);
             this.Controls.Add(this.gp_options);
@@ -241,6 +251,8 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Label lbl_git;
 
         private System.Windows.Forms.Button btn_maj;
 
