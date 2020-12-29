@@ -1,0 +1,10 @@
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\bin\Debug\ModPackInstaller.exe.config
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\bin\Debug\ModPackInstaller.exe
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\bin\Debug\ModPackInstaller.pdb
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.csprojAssemblyReference.cache
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.Properties.Resources.resources
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.csproj.GenerateResource.cache
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.csproj.CoreCompileInputs.cache
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.exe
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.pdb
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\obj\Debug\ModPackInstaller.MainWindow.resources
