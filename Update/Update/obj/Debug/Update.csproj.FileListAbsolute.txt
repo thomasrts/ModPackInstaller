@@ -1,0 +1,6 @@
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\Update\Update\bin\Debug\Update.exe
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\Update\Update\bin\Debug\Update.pdb
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\Update\Update\obj\Debug\Update.csprojAssemblyReference.cache
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\Update\Update\obj\Debug\Update.csproj.CoreCompileInputs.cache
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\Update\Update\obj\Debug\Update.exe
+C:\Users\thoma\Documents\Projets\C#\ModPackInstaller\Update\Update\obj\Debug\Update.pdb
