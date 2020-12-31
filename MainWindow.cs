@@ -12,7 +12,7 @@ namespace ModPackInstaller
 {
     public partial class MainWindow : Form
     {
-        private const string _version = "1.2";
+        private const string _version = "1.3";
         private string _path;
         private int _ticks;
         protected bool GoodVersion;
@@ -41,21 +41,33 @@ namespace ModPackInstaller
 
         public void SubstrVersion(string path)
         {
-            if (path.Contains('-'))
+            if (Directory.Exists(tb_path.Text))
             {
-                var pos = path.LastIndexOf(@"\") + 1;
-                var substrVersion = tb_path.Text.Substring(pos, tb_path.Text.Length - pos);
-                var infos = substrVersion.Split('-');
-                var version = infos[0] + '-' + infos[1];
-                SetVersionColor(version, infos[2]);
-                _path = path;
+                if (path.Contains('-'))
+                {
+                    var pos = path.LastIndexOf(@"\") + 1;
+                    var substrVersion = tb_path.Text.Substring(pos, tb_path.Text.Length - pos);
+                    var infos = substrVersion.Split('-');
+                    var version = infos[0] + '-' + infos[1];
+                    SetVersionColor(version, infos[2]);
+                    _path = path;
+                }
+                else
+                {
+                    var pos = path.LastIndexOf(@"\") + 1;
+                    var substrVersion = tb_path.Text.Substring(pos, tb_path.Text.Length - pos);
+                    SetVersionColor(substrVersion, "Introuvable");
+                    _path = path;
+                }
             }
             else
             {
-                var pos = path.LastIndexOf(@"\") + 1;
-                var substrVersion = tb_path.Text.Substring(pos, tb_path.Text.Length - pos);
-                SetVersionColor(substrVersion, "Introuvable");
-                _path = path;
+                lbl_version.ForeColor = Color.Red;
+                lbl_version.Text =
+                    "Le dossier par défaut n'existe pas, veuillez installer / réinstaller Forge correctement";
+                btn_forge.Enabled = true;
+                btn_valider.Enabled = false;
+                GoodVersion = false;
             }
         }
 
@@ -85,7 +97,7 @@ namespace ModPackInstaller
             {
                 lbl_version.ForeColor = Color.Red;
                 lbl_version.Text = "Version détectée : " + version + "\r" +
-                                   "La version de Minecraft n'est pas la bonne : " + version + " au lieu de 1.12.2" +
+                                   $"La version de Minecraft n'est pas la bonne : {version} au lieu de 1.12.2" +
                                    "\rL'installation ne pourra pas se faire";
                 btn_valider.Enabled = false;
                 btn_forge.Enabled = false;
@@ -112,6 +124,7 @@ namespace ModPackInstaller
                 "À lire attentivement", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             Process.Start("forge-1.12.2-14.23.5.2854-installer.jar");
         }
+        
 
         private void MovingMods()
         {
