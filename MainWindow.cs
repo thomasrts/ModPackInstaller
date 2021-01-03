@@ -135,45 +135,58 @@ namespace ModPackInstaller
                 lbl_pct.Text = GetPbValue() + " %";
                 if (Directory.Exists(@"mods"))
                 {
-                    if (Directory.Exists(@"config"))
-                    {
-                        lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier mods";
-                        Directory.Move(@"mods", _path + @".\mods\");
-                        SetPbValue(15);
-                        lbl_pct.Text = GetPbValue() + " %";
-                        lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier config";
-                        Directory.Move(@"config", _path + @".\config\");
-                        SetPbValue(46);
-                        lbl_pct.Text = GetPbValue() + " %";
-
-                        if (cb_ressources.Checked)
+                    if (Directory.Exists(@"config")){
+                        if (Directory.Exists(@"scripts"))
                         {
-                            if (Directory.Exists(@"resourcepacks"))
+                            lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier mods";
+                            Directory.Move(@"mods", _path + @".\mods\");
+                            SetPbValue(15);
+                            lbl_pct.Text = GetPbValue() + " %";
+                            lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier config";
+                            Directory.Move(@"config", _path + @".\config\");
+                            SetPbValue(37);
+                            lbl_pct.Text = GetPbValue() + " %";
+                            lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier scripts";
+                            Directory.Move(@"scripts", _path + @".\scripts\");
+                            SetPbValue(46);
+                        
+                            if (cb_ressources.Checked)
                             {
-                                Directory.Move(@"resourcepacks", _path + @".\resourcepacks\");
-                                lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier shaderpacks";
-                                SetPbValue(67);
-                                lbl_pct.Text = GetPbValue() + " %";
+                                if (Directory.Exists(@"resourcepacks"))
+                                {
+                                    Directory.Move(@"resourcepacks", _path + @".\resourcepacks\");
+                                    lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier shaderpacks";
+                                    SetPbValue(67);
+                                    lbl_pct.Text = GetPbValue() + " %";
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Dossier resourcepacks introuvable");
+                                    MessageBox.Show("Installation des ResourcesPacks impossible");
+                                }
                             }
-                            else
+
+                            if (cb_shaders.Checked)
                             {
-                                MessageBox.Show("Dossier resourcepacks introuvable");
+                                if (Directory.Exists(@"shaderpacks"))
+                                {
+                                    Directory.Move(@"shaderpacks", _path + @".\shaderpacks\");
+                                    SetPbValue(83);
+                                    lbl_pct.Text = GetPbValue() + " %";
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Dossier shaderpacks introuvable");
+                                    MessageBox.Show("Installation des shaders impossible");
+                                }
                             }
                         }
-
-                        if (cb_shaders.Checked)
+                        else
                         {
-                            if (Directory.Exists(@"shaderpacks"))
-                            {
-                                Directory.Move(@"shaderpacks", _path + @".\shaderpacks\");
-                                SetPbValue(83);
-                                lbl_pct.Text = GetPbValue() + " %";
-                            }
-                            else
-                            {
-                                MessageBox.Show("Dossier shaderpacks introuvable");
-                            }
+                            MessageBox.Show("Dossier scripts introuvable", "Erreur", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                         }
+
 
                         SetPbValue(100);
                         lbl_pct.Text = GetPbValue() + " %";
@@ -214,7 +227,7 @@ namespace ModPackInstaller
 
         private void SaveFolders()
         {
-            var date = DateTime.Now.ToString("yyyy-M-d_hh-mm-ss");
+            var date = DateTime.Now.ToString("yyyy-M-d_bhh-mm-ss");
             var dirPath = _path + @".\backup\" + date;
             MessageBox.Show(
                 "Une sauvegarde de vos fichiers existants va être faite\rElle sera disponible au chemin suivant\r" +
@@ -228,9 +241,16 @@ namespace ModPackInstaller
                     Directory.Move(_path + @".\mods\", dirPath + @".\mods");
                     if (Directory.Exists(_path + @".\resourcepacks\"))
                     {
-                        Directory.Move(_path + @".\resourcepacks\", dirPath + @".\resourcepacks");
+                        Directory.Move(_path + @".\resourcepacks\", dirPath + @".\resourcepacks\");
                         if (Directory.Exists(_path + @".\shaderpacks\"))
-                            Directory.Move(_path + @".\shaderpacks\", dirPath + @".\shaderpacks");
+                        {
+                            Directory.Move(_path + @".\shaderpacks\", dirPath + @".\shaderpacks\");
+                            if (Directory.Exists(_path + @".\scripts\"))
+                            {
+                                Directory.Move(_path + @".\scripts\", dirPath + @".\scripts\");
+                                
+                            }
+                        }
                     }
                 }
             }
