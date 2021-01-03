@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Octokit;
+using static System.IO.Directory;
 
 namespace ModPackInstaller
 {
@@ -41,7 +42,7 @@ namespace ModPackInstaller
 
         public void SubstrVersion(string path)
         {
-            if (Directory.Exists(tb_path.Text))
+            if (Exists(tb_path.Text))
             {
                 if (path.Contains('-'))
                 {
@@ -64,7 +65,7 @@ namespace ModPackInstaller
             {
                 lbl_version.ForeColor = Color.Red;
                 lbl_version.Text =
-                    "Le dossier par défaut n'existe pas, veuillez installer / réinstaller Forge correctement";
+                    @"Le dossier par défaut n'existe pas, veuillez installer / réinstaller Forge correctement";
                 btn_forge.Enabled = true;
                 btn_valider.Enabled = false;
                 GoodVersion = false;
@@ -73,35 +74,33 @@ namespace ModPackInstaller
 
         public void SetVersionColor(string version, string forgeVersion)
         {
-            if (version == "1.12.2-forge")
+            switch (version)
             {
-                lbl_version.ForeColor = Color.Green;
-                lbl_version.Text = "Version de Minecraft détectée : 1.12.2\r" +
-                                   "Version de Forge : " + forgeVersion +
-                                   "\r\rTOUT EST OK!";
-                btn_forge.Enabled = false;
-                btn_valider.Enabled = true;
-                GoodVersion = true;
-            }
-            else if (version == "1.12.2")
-            {
-                lbl_version.ForeColor = Color.OrangeRed;
-                lbl_version.Text = "Version de Minecraft détectée : 1.12.2\r" +
-                                   "Forge n'est pas installé\r\r" +
-                                   "Veuillez installer Forge avant de lancer l'installation des mods!";
-                btn_forge.Enabled = true;
-                btn_valider.Enabled = false;
-                GoodVersion = false;
-            }
-            else
-            {
-                lbl_version.ForeColor = Color.Red;
-                lbl_version.Text = "Version détectée : " + version + "\r" +
-                                   $"La version de Minecraft n'est pas la bonne : {version} au lieu de 1.12.2" +
-                                   "\rL'installation ne pourra pas se faire";
-                btn_valider.Enabled = false;
-                btn_forge.Enabled = false;
-                GoodVersion = false;
+                case "1.12.2-forge":
+                    lbl_version.ForeColor = Color.Green;
+                    lbl_version.Text =
+                        $"Version de Minecraft détectée : 1.12.2\rVersion de Forge : {forgeVersion}\r\rTOUT EST OK!";
+                    btn_forge.Enabled = false;
+                    btn_valider.Enabled = true;
+                    GoodVersion = true;
+                    break;
+                case "1.12.2":
+                    lbl_version.ForeColor = Color.OrangeRed;
+                    lbl_version.Text = "Version de Minecraft détectée : 1.12.2\r" +
+                                       "Forge n'est pas installé\r\r" +
+                                       "Veuillez installer Forge avant de lancer l'installation des mods!";
+                    btn_forge.Enabled = true;
+                    btn_valider.Enabled = false;
+                    GoodVersion = false;
+                    break;
+                default:
+                    lbl_version.ForeColor = Color.Red;
+                    lbl_version.Text =
+                        $"Version détectée : {version}\rLa version de Minecraft n'est pas la bonne : {version} au lieu de 1.12.2\rL'installation ne pourra pas se faire";
+                    btn_valider.Enabled = false;
+                    btn_forge.Enabled = false;
+                    GoodVersion = false;
+                    break;
             }
         }
 
@@ -109,12 +108,10 @@ namespace ModPackInstaller
         private void btn_search_Click(object sender, EventArgs e)
         {
             var result = FolderBwser.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                var folderName = FolderBwser.SelectedPath;
-                tb_path.Text = folderName;
-                SubstrVersion(folderName);
-            }
+            if (result != DialogResult.OK) return;
+            var folderName = FolderBwser.SelectedPath;
+            tb_path.Text = folderName;
+            SubstrVersion(folderName);
         }
 
         private void btn_forge_Click(object sender, EventArgs e)
@@ -133,10 +130,10 @@ namespace ModPackInstaller
                 lbl_op.Text = "OPERATION EN COURS : Démarrage de l'installation";
                 SetPbValue(2);
                 lbl_pct.Text = GetPbValue() + " %";
-                if (Directory.Exists(@"mods"))
+                if (Exists(@"mods"))
                 {
-                    if (Directory.Exists(@"config")){
-                        if (Directory.Exists(@"scripts"))
+                    if (Exists(@"config")){
+                        if (Exists(@"scripts"))
                         {
                             lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier mods";
                             Directory.Move(@"mods", _path + @".\mods\");
@@ -152,7 +149,7 @@ namespace ModPackInstaller
                         
                             if (cb_ressources.Checked)
                             {
-                                if (Directory.Exists(@"resourcepacks"))
+                                if (Exists(@"resourcepacks"))
                                 {
                                     Directory.Move(@"resourcepacks", _path + @".\resourcepacks\");
                                     lbl_op.Text = "OPERATION EN COURS : Déplacement du dossier shaderpacks";
@@ -168,7 +165,7 @@ namespace ModPackInstaller
 
                             if (cb_shaders.Checked)
                             {
-                                if (Directory.Exists(@"shaderpacks"))
+                                if (Exists(@"shaderpacks"))
                                 {
                                     Directory.Move(@"shaderpacks", _path + @".\shaderpacks\");
                                     SetPbValue(83);
@@ -232,20 +229,20 @@ namespace ModPackInstaller
             MessageBox.Show(
                 "Une sauvegarde de vos fichiers existants va être faite\rElle sera disponible au chemin suivant\r" +
                 dirPath);
-            Directory.CreateDirectory(dirPath);
-            if (Directory.Exists(_path + @".\config\"))
+            CreateDirectory(dirPath);
+            if (Exists(_path + @".\config\"))
             {
                 Directory.Move(_path + @".\config\", dirPath + @".\config");
-                if (Directory.Exists(_path + @".\mods\"))
+                if (Exists(_path + @".\mods\"))
                 {
                     Directory.Move(_path + @".\mods\", dirPath + @".\mods");
-                    if (Directory.Exists(_path + @".\resourcepacks\"))
+                    if (Exists(_path + @".\resourcepacks\"))
                     {
                         Directory.Move(_path + @".\resourcepacks\", dirPath + @".\resourcepacks\");
-                        if (Directory.Exists(_path + @".\shaderpacks\"))
+                        if (Exists(_path + @".\shaderpacks\"))
                         {
                             Directory.Move(_path + @".\shaderpacks\", dirPath + @".\shaderpacks\");
-                            if (Directory.Exists(_path + @".\scripts\"))
+                            if (Exists(_path + @".\scripts\"))
                             {
                                 Directory.Move(_path + @".\scripts\", dirPath + @".\scripts\");
                                 
@@ -259,16 +256,22 @@ namespace ModPackInstaller
         private void timer1_Tick(object sender, EventArgs e)
         {
             _ticks++;
-            if (_ticks == 1) lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 3";
-
-            if (_ticks == 2) lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 2";
-
-            if (_ticks == 3) lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 1";
-            if (_ticks == 4)
+            switch (_ticks)
             {
-                lbl_op.Text = "OPERATION EN COURS : Installation du modpack";
-                SaveFolders();
-                MovingMods();
+                case 1:
+                    lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 3";
+                    break;
+                case 2:
+                    lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 2";
+                    break;
+                case 3:
+                    lbl_op.Text = "OPERATION EN COURS : Lancement de l'installation dans 1";
+                    break;
+                case 4:
+                    lbl_op.Text = "OPERATION EN COURS : Installation du modpack";
+                    SaveFolders();
+                    MovingMods();
+                    break;
             }
         }
 
